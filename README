@@ -8,21 +8,21 @@ for example, if the request  is like this
 
     http://example.com/frontend_dev.php/static/sample.html
 
-the module of this plugin, which is sfSimplePage module, render the sample.html in ./data/static directory.
+the module of this plugin, which is sfSimplePage module, renders the sample.html in ./data/static directory.
 
-if the request is like this
+If the request is like this
 
     http://example.com/frontend_dev.php/static/hoge/sample2.html
 
 render the sample2.html in ./data/static/hoge directory.
 
-These page is rendered by symfony, so you can use view system of partial, component, helper...
+These pages are rendered by symfony, so you can use partials, components, helpers, or any other php statement.
 
 ## Installation
 
   * Install plugin:
         
-        symfony plugin-install http://plugins.symfony-project.com/sfSimplePagePlugin
+        symfony plugin:install http://plugins.symfony-project.com/sfSimplePagePlugin
         
   * or through Subversion:
         
@@ -30,13 +30,15 @@ These page is rendered by symfony, so you can use view system of partial, compon
 
   * (only symfony 1.2+) Enable this plugin in ProjectConfiguration.class.php
         
+        [php]
         public function setup()
         {
           $this->enablePlugins('sfSimplePagePlugin');
         }
 
-  * Enable this sfSimplePage  module in your setting.yml
+  * Enable this sfSimplePage  module in your application settings.yml
         
+        [yml]
         all:
           .settings:
             enabled_modules:        [default, sfSimplePage]
@@ -53,51 +55,58 @@ These page is rendered by symfony, so you can use view system of partial, compon
         
   * [Optional] Use the sfSimplePageFile routing rule to create links to files in the static root dir
   
-        e.g.in template : 
+     e.g.in template : 
+
+        [php]
         echo link_to( 'About', '@sfSimplePageFile?file=about.html')
 
   * [Optional] I18n support is provided through the classical means of session user culture (sf_culture parameter)
   
-    In application app.yml add  
-            sf_simple_page_plugin_use_i18n: true 
-        to enable i18n support
+    To enable i18n support, in application app.yml add:
+    
+        [yml]
+        all:
+          sf_simple_page_plugin:
+            use_i18n: true 
 
-   Now the session user culture (e.g. en, gr) is interpreted as a first implicit directory.
-    Also when the static file is not found under the culture dir a final attempt is made on the static folder before giving a 404 error.
+
+   Now the session user culture (e.g. en, el) is interpreted as a first implicit directory.
+   Also when the static file is not found under the culture dir a final attempt is made on the static folder before giving a 404 error.
         
-        Example contents of static folder
+   Example contents of static folder
+
         static/
-            en/
-                help.html
-                about.html
-            el/
-                help.html
-                about.html
+          en/
+            help.html
+            about.html
+          el/
+            help.html
+            about.html
         
-    The application is responsible for the management of a sane sf_culture session variable. 
-    Read i18n support in "symfony book".
+    The application is responsible for the management of a sane sf_culture session variable. Read i18n support in "symfony book" for more.
 
-  * [Optional] Use the component sfSimplePage/static ('file'=>$file) from anywhere in the view layer to embed static content on every page you desire.
+  * [Optional] Use the component sfSimplePage/static ('file'=>$file) from anywhere in the view layer to embed static content on every page you desire. In case you need to provide a different file path provide a 'file_path'=>&lt;path_to_static_dir&gt;.
 
-        e.g. in apps/frontend/modules/product/templates/showSuccess.php
+    e.g. in apps/frontend/modules/product/templates/showSuccess.php
+
         [...]
         <div id="terms">
         <?php include_component('sfSimplePage','static', array('file'=>'terms.html') ) ?>
         </div>
+
     will output the contents of terms.html file inside the #terms div !
     
-## NOTES:
-*  The names of the route prefix and the static content directory can be changed 
-   from the application app.yml configuration file. Also the routes can be disabled, 
-   in this case new routes have to be defined at the main routing.yml file
+## Configuration
+
+The route prefix and the static content directory can be changed from the application app.yml configuration file. Also the routes can be disabled, in this case new routes have to be defined at the main routing.yml file. The sfSimplePagePlugin parameters, along with their default values are as follows:
    
-        e.g. in apps/frontend/config/app.yml:
+   E.g. in apps/frontend/config/app.yml:
+
+        [yml]
         all:
           sf_simple_page_plugin:
-            route_prefix: documentation
-            template_path: %SF_DATA_DIR%/doc
+            template_path: '%SF_DATA_DIR%/static'
+            route_prefix: static
+            use_i18n: false
             routes_register: true
-      
-  This will mean that the route prefix for static content is documentation
-  (i.e. domain.com/index.php/documentation) and that the file data are 
-  in data/doc relative to sympfony root on a typical installation
+

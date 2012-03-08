@@ -1,1 +1,1 @@
-<?php include_component('sfSimplePage', 'static', array('file'=>$file)) ?>
+<?php include_component('sfSimplePage', 'static', array('file'=>$file, 'file_path'=>$file_path)) ?>

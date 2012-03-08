@@ -20,10 +20,11 @@ abstract class BasesfSimplePageComponents extends sfComponents
     //check i18n support
     $culture = '' ;
     $cult_template_path = '' ;
-    $gen_template_path = sfConfig::get("app_sf_simple_page_plugin_template_path", "static") . DIRECTORY_SEPARATOR . ltrim($pathinfo,'/');     
+    $file_path = (isset($this->file_path) ? $this->file_path : sfConfig::get("app_sf_simple_page_plugin_template_path", "static"));
+    $gen_template_path = $file_path . DIRECTORY_SEPARATOR . ltrim($pathinfo,'/');     
     if ( sfConfig::get('app_sf_simple_page_plugin_use_i18n', false ) ) {
         $culture = $this->getUser()->getCulture() ;
-        $cult_template_path = sfConfig::get("app_sf_simple_page_plugin_template_path", "static") . DIRECTORY_SEPARATOR . 
+        $cult_template_path = $file_path . DIRECTORY_SEPARATOR . 
             $culture . DIRECTORY_SEPARATOR . ltrim($pathinfo,'/');
     }
     

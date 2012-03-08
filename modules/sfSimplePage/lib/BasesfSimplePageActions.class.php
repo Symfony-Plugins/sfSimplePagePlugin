@@ -22,6 +22,7 @@ abstract class BasesfSimplePageActions extends sfActions
 
     // prepare component file parameter
     $this->file = $pathinfo ;
+    $this->file_path = sfConfig::get("app_sf_simple_page_plugin_template_path", "static");
     
     return sfView::SUCCESS;
   }
